@@ -21,7 +21,7 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI(recording: false)
+        configureUI(false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,7 +31,7 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
     // MARK: - Audio Functions
     
     @IBAction func tapToRecord(_ sender: Any) {
-        configureUI(recording: true)
+        configureUI(true)
         
         let directoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let recordingName = "recordedFile.wav"
@@ -49,7 +49,7 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     @IBAction func tapToStopRecord(_ sender: Any) {
-        configureUI(recording: false)
+        configureUI(false)
         audioRecorder.stop()
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(false)
@@ -57,16 +57,10 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
     
     // MARK: - UI Functions
     
-    func configureUI(recording: Bool) {
-        if recording {
-            recordButton.isEnabled = false
-            stopRecordButton.isEnabled = true
-            recordLabel.text = "Recording"
-        } else {
-            recordButton.isEnabled = true
-            stopRecordButton.isEnabled = false
-            recordLabel.text = "Tap To Record"
-        }
+    func configureUI(_ isRecording: Bool = false) {
+        recordButton.isEnabled = !isRecording
+        stopRecordButton.isEnabled = isRecording
+        recordLabel.text = isRecording ? "Recording" : "Tap To Record"
     }
     
     // MARK: - Audio delegate
